@@ -1,0 +1,84 @@
+# conda
+conda activate rabies
+
+# creating all directories necessary:
+
+mkdir preprocessed
+mkdir confoundscorrected
+mkdir group_ica
+mkdir dual_regression
+mkdir dual_regression/design_files
+mkdir visualization
+mkdir data_diagnosis
+
+# bids conversion using brkraw
+# workflow: brkraw -> table -> edit table -> brkraw
+
+brkraw bids_helper datadir brktable 
+
+brkraw bids_convert brukerfiles brukertable.csv -o data
+
+
+
+# preprocessing using rabies
+# (minimal) preprocessing
+docker run -it --rm --user $(id -u) \
+-v $PWD/data:/data:ro \
+-v $PWD/preprocessed:/preprocessed \
+ghcr.io/cobralab/rabies:latest -p MultiProc preprocess /data/ /preprocessed/ --apply_STC --detect_dummy --TR 1.0 --commonspace_reg masking=true,brain_extraction=false,template_registration=SyN,fast_commonspace=false
+
+
+# confound correction (anat compcor)
+docker run -it --rm --user $(id -u) \
+-v $PWD/data:/data:ro \
+-v $PWD/preprocessed:/preprocessed \
+-v $PWD/confoundscorrected:/confoundscorrected \
+ghcr.io/cobralab/rabies:latest -p MultiProc confound_correction /preprocessed/ /confoundscorrected/ --conf_list aCompCor_percent mot_6 --smoothing_filter 0.3 
+
+
+# confound correction (ICA AROMA)
+docker run -it --rm --user $(id -u) \
+-v $PWD/data:/data:ro \
+-v $PWD/preprocessed:/preprocessed \
+-v $PWD/confoundscorrected_icaaroma:/confoundscorrected_icaaroma \
+ghcr.io/cobralab/rabies:latest -p MultiProc confound_correction /preprocessed/ /confoundscorrected_icaaroma/ --conf_list WM_signal CSF_signal mot_24 --smoothing_filter 0.3 --ica_aroma apply=true,dim=0,random_seed=1
+
+
+# group_ica to generate group ica template (and check confound correction)
+docker run -it --rm --user $(id -u) \
+-v $PWD/data:/data:ro \
+-v $PWD/preprocessed:/preprocessed \
+-v $PWD/confoundscorrected:/confoundscorrected \
+-v $PWD/group_ica_output:/group_ica_output/ \
+ghcr.io/cobralab/rabies:latest -p MultiProc analysis /confoundscorrected /group_ica_output/ --group_ica apply=true,dim=60,random_seed=1
+
+
+# check data anylsis option to see data quality 
+
+# next dual regression
+see script folder (mask creation / dual_reg command editing / glm creation) -> rocket launch
+
+use: find . -type f -name "*nii.gz*" > files.txt
+to create file list
+
+# check data anylsis option to see data quality 
+
+
+
+
+
+
+#### Test 
+docker run -it --rm --user $(id -u) \
+-v $PWD/test_dataset:/test_dataset:ro \
+-v $PWD/test_output:/test_output \
+-v $PWD/test_correction_output:/test_correction_output \
+-v $PWD/test_analysis_output:/test_analysis_output/ \
+-v $PWD/test_dr_output:/test_dr_output/ \
+ghcr.io/cobralab/rabies:latest -p MultiProc analysis /test_correction_output /test_dr_output/ --DR_ICA
+
+
+#
+had to chmod the preprocessed folder for some reaseon?
+chmod -R 777 preprocessed
+

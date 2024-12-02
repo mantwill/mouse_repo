@@ -1,0 +1,1 @@
+/usr/local/fsl/bin/slices_summary ../misc/visualization_images_2/DSURQ/DSURQE_100micron_DRICA_resampled 4 ../misc/visualization_images_2/DSURQ/anat_template_DSURQE_resampled_masked.nii.gz visualization/DSURQE_100micron_DRICA.sum
