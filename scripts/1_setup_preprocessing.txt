@@ -1,15 +1,7 @@
 # conda
 conda activate rabies
 
-# creating all directories necessary:
-
-mkdir preprocessed
-mkdir confoundscorrected
-mkdir group_ica
-mkdir dual_regression
-mkdir dual_regression/design_files
-mkdir visualization
-mkdir data_diagnosis
+# all required folders should have been cloned
 
 # bids conversion using brkraw
 # workflow: brkraw -> table -> edit table -> brkraw
