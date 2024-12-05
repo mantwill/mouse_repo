@@ -1,0 +1,23 @@
+
+
+# keep folder structure but remove all files inside folders
+preprocessed/*
+!preprocessed/.gitkeep
+
+confoundscorrected/*
+!confoundscorrected/.gitkeep
+
+group_ica/*
+!group_ica/.gitkeep
+
+dual_regression/*
+!dual_regression/.gitkeep
+
+dual_regression/design_files/*
+!dual_regression/design_files/.gitkeep
+
+visualization/*
+!visualization/.gitkeep
+
+data_diagnosis/*
+!data_diagnosis/.gitkeep
