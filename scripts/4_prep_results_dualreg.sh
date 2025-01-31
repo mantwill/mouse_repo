@@ -3,7 +3,7 @@
 # Store the current directory
 CURRENT_DIR=$(pwd)
 
-DUAL_REG_PATH="${CURRENT_DIR}/dual_regression/output_withmask"
+DUAL_REG_PATH="${CURRENT_DIR}/dual_regression/dual_reg_A_vs_B"
 OUTPUT_PATH="${DUAL_REG_PATH}/stats"
 pval_cutoff=0.95  # Set p-value cutoff for significance
 

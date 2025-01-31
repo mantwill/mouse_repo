@@ -6,11 +6,10 @@ conda activate rabies
 # bids conversion using brkraw
 # workflow: brkraw -> table -> edit table -> brkraw
 
+
+
 brkraw bids_helper datadir brktable 
-
 brkraw bids_convert brukerfiles brukertable.csv -o data
-
-
 
 # preprocessing using rabies
 # (minimal) preprocessing
@@ -19,7 +18,6 @@ docker run -it --rm --user $(id -u) \
 -v $PWD/preprocessed:/preprocessed \
 ghcr.io/cobralab/rabies:latest -p MultiProc preprocess /data/ /preprocessed/ --apply_STC --detect_dummy --TR 1.0 --commonspace_reg masking=true,brain_extraction=false,template_registration=SyN,fast_commonspace=false
 
-
 # confound correction (anat compcor)
 docker run -it --rm --user $(id -u) \
 -v $PWD/data:/data:ro \
@@ -27,14 +25,12 @@ docker run -it --rm --user $(id -u) \
 -v $PWD/confoundscorrected:/confoundscorrected \
 ghcr.io/cobralab/rabies:latest -p MultiProc confound_correction /preprocessed/ /confoundscorrected/ --conf_list aCompCor_percent mot_6 --smoothing_filter 0.3 
 
-
 # confound correction (ICA AROMA)
 docker run -it --rm --user $(id -u) \
 -v $PWD/data:/data:ro \
 -v $PWD/preprocessed:/preprocessed \
 -v $PWD/confoundscorrected_icaaroma:/confoundscorrected_icaaroma \
 ghcr.io/cobralab/rabies:latest -p MultiProc confound_correction /preprocessed/ /confoundscorrected_icaaroma/ --conf_list WM_signal CSF_signal mot_24 --smoothing_filter 0.3 --ica_aroma apply=true,dim=0,random_seed=1
-
 
 # group_ica to generate group ica template (and check confound correction)
 docker run -it --rm --user $(id -u) \
