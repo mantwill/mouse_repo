@@ -177,7 +177,7 @@ while [ $j -lt $Nics ] ; do
   fi
   if [ $NPERM -gt 1 ] ; then
     # EDIT HERE
-    RAND="$FSLDIR/bin/randomise -i $OUTPUT/dr_stage2_ic$jj -o $OUTPUT/dr_stage3_ic$jj -m $OUTPUT/../misc_data/DSURQE_masks/bin_mask_comp_$jj $DESIGN -n $NPERM -T -V" #not sure whether this works
+    RAND="$FSLDIR/bin/randomise -i $OUTPUT/dr_stage2_ic$jj -o $OUTPUT/dr_stage3_ic$jj -m $OUTPUT/../../misc_data/DSURQE_masks/bin_mask_comp_$jj $DESIGN -n $NPERM -T -V" 
   fi
 
   echo "$FSLDIR/bin/fslmerge -t $OUTPUT/dr_stage2_ic$jj \`\$FSLDIR/bin/imglob $OUTPUT/dr_stage2_subject*_ic${jj}.*\` ; \

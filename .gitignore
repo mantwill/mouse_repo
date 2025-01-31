@@ -21,3 +21,6 @@ visualization/*
 
 data_diagnosis/*
 !data_diagnosis/.gitkeep
+
+data/*
+!data/.gitkeep
